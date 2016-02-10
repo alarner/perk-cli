@@ -1,0 +1,20 @@
+{
+  "name": "perk-cli",
+  "version": "1.0.0",
+  "description": "Project builder for Perk.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "perk": "./index.js"
+  },
+  "author": "Aaron Larner",
+  "license": "ISC",
+  "dependencies": {
+    "adm-zip": "^0.4.7",
+    "async": "^1.5.2",
+    "fs-extra": "^0.26.5",
+    "request": "^2.69.0"
+  }
+}
