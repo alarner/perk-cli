@@ -1,7 +1,7 @@
 {
   "name": "perk-cli",
   "version": "1.0.0",
-  "description": "Project builder for Perk.",
+  "description": "Command link tool for bootstrapping perk apps",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
