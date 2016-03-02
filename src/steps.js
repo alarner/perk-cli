@@ -1,4 +1,5 @@
-let fs = require('fs');
+let path = require('path');
+let fs = require('fs-extra');
 let request = require('request');
 let AdmZip = require('adm-zip');
 let help =
@@ -81,29 +82,6 @@ module.exports = {
 			});
 		});
 	},
-	// 	console.log('unzipping...');
-	// 	let zip = new AdmZip(zipPath);
-	// 	zip.extractAllTo(extractPath, false);
-	// 	let unzippedDir = fs.readdirSync(extractPath);
-
-	// 	if(unzippedDir.length !== 1) {
-	// 		console.warn('Invalid unzipped file format.');
-	// 		process.exit(0);
-	// 	}
-
-	// 	let subfiles = fs.readdirSync(path.join(extractPath, unzippedDir[0]));
-
-	// 	async.each(
-	// 		subfiles,
-	// 		(file, cb) => {
-	// 			fs.move(
-	// 				path.join(extractPath, unzippedDir[0], file),
-	// 				path.join(targetPath, file),
-	// 				cb
-	// 			);
-	// 		},
-	// 		cleanup
-	// 	);
 	unzip: function(fromPath, toPath) {
 		return new Promise((resolve, reject) => {
 			let zip = null;
@@ -118,6 +96,14 @@ module.exports = {
 			}
 			try {
 				zip.extractAllTo(toPath, true);
+				fs.readdir(toPath, (err, files) => {
+					if(files.length > 1) {
+						resolve(toPath);
+					}
+					else if(files.length === 1) {
+						resolve(path.join(toPath, files[0]));
+					}
+				});
 			}
 			catch(e) {
 				return reject({
@@ -126,5 +112,37 @@ module.exports = {
 				});
 			}
 		});
+	},
+	ensureDir: function(dirPath) {
+		return new Promise((resolve, reject) => {
+			fs.ensureDir(dirPath, err => {
+				if(err) {
+					return reject({
+						message: `Problem creating project \`${dirPath}\`. Are the permissions correct?`,
+						code: 0
+					});
+				}
+				resolve(dirPath);
+			});
+		});
+	},
+	finish: function(dirPath) {
+		return `
+
+
+Your new project has successfully been created in ${dirPath}
+
+You should run:
+
+	cd ${dirPath} && npm install
+
+While dependencies for your new perk app are installing you can check
+out more info on how to use all the great features of perk at:
+
+http://perkframework.com/guides/getting-started-os-x.html
+
+
+
+`;
 	}
 };
