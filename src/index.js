@@ -1,7 +1,6 @@
 #!/usr/bin/env node --use_strict
 
 let path = require('path');
-let mergedirs = require('merge-dirs').default;
 let steps = require('./steps');
 
 const PERK_URL = 'http://api.perkframework.com/location';
@@ -21,14 +20,14 @@ if(!path.isAbsolute(targetPath)) {
 	targetPath = path.join(process.cwd(), targetPath);
 }
 
-steps.ensureDir(TMP_PATH)
-.then(p => steps.ensureDir(DOWNLOAD_PATH))
-.then(p => steps.ensureDir(targetPath))
-.then(p => steps.getLocation(PERK_URL))
-.then(location => steps.download(location, ZIP_PATH))
-.then(downloadDir => steps.unzip(downloadDir, EXTRACT_PATH))
-.then(unzipDir => mergedirs(unzipDir, targetPath, 'skip'))
-.then(() => steps.finish(targetPath))
+steps.all({
+	tmpPath: TMP_PATH,
+	downloadPath: DOWNLOAD_PATH,
+	perkUrl: PERK_URL,
+	zipPath: ZIP_PATH,
+	extractPath: EXTRACT_PATH,
+	targetPath: targetPath
+})
 .then(console.log)
 .catch(err => {
 	if(err.hasOwnProperty(message) && err.hasOwnProperty(err.code)) {
