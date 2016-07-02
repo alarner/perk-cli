@@ -101,6 +101,6 @@ module.exports = {
 		});
 	},
 	finish: function finish(dirPath) {
-		return '\n\n\nYour new project has successfully been created in ' + dirPath + '\n\nYou should run:\n\n\tcd ' + dirPath + ' && npm install\n\nWhile dependencies for your new perk app are installing you can check\nout more info on how to use all the great features of perk at:\n\nhttp://perkframework.com/guides/getting-started-os-x.html\n\n\n\n';
+		return '\n\n\nYour new project has successfully been created in ' + dirPath + '\n\nYou should run:\n\n\tcd ' + dirPath + ' && npm install\n\nWhile dependencies for your new perk app are installing you can check\nout more info on how to use all the great features of perk at:\n\nhttp://perkframework.com/v1/guides/getting-started-os-x.html\n\n\n\n';
 	}
 };
