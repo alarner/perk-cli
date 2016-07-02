@@ -25,6 +25,7 @@ You can read more about perk at http://perkframework.com
 module.exports = {
 	all: function(locations) {
 		return this.ensureDir(locations.tmpPath)
+		.then(p => this.clearLocation(locations.extractPath))
 		.then(p => this.ensureDir(locations.downloadPath))
 		.then(p => this.ensureDir(locations.targetPath))
 		.then(p => this.getLocation(locations.perkUrl))
@@ -73,6 +74,17 @@ module.exports = {
 				}
 			);
 		});
+	},
+	clearLocation: function(url){
+		return new Promise((resolve, reject)=>{
+			fs.remove(url, function (err, data) {
+			  if (err) { 
+			  	reject(err) 
+			  } else {
+			  	resolve()
+			  }
+			})
+		})
 	},
 	download: function(url, to) {
 		return new Promise((resolve, reject) => {
