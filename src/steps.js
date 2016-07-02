@@ -139,7 +139,7 @@ You should run:
 While dependencies for your new perk app are installing you can check
 out more info on how to use all the great features of perk at:
 
-http://perkframework.com/guides/getting-started-os-x.html
+http://perkframework.com/v1/guides/getting-started-os-x.html
 
 
 
