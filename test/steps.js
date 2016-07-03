@@ -6,11 +6,8 @@ let expect = chai.expect;
 let fs = require('fs-extra');
 let path = require('path');
 
-// const PERK_URL = 'http://api.perkframework.com/location';
 const ZIP_URL = 'https://github.com/alarner/react-express-template/archive/master.zip';
-// const DOWNLOAD = './test/fixtures/tmp/download';
 const DOWNLOAD_PERMANENT = path.join(__dirname, './fixtures/perk-master.zip');
-// const EXTRACT = './test/fixtures/tmp/extract';
 const BAD = path.join(__dirname, './fixtures/tmp/download_bad');
 const TARGET_DIR = path.join(__dirname, './fixtures/new-dir');
 
