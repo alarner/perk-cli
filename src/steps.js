@@ -2,6 +2,7 @@ let path = require('path');
 let fs = require('fs-extra');
 let request = require('request');
 let AdmZip = require('adm-zip');
+let mergedirs = require('merge-dirs').default;
 let help =
 `
 
@@ -22,6 +23,17 @@ You can read more about perk at http://perkframework.com
 `;
 
 module.exports = {
+	all: function(locations) {
+		return this.ensureDir(locations.tmpPath)
+		.then(p => this.clearPath(locations.extractPath))
+		.then(p => this.ensureDir(locations.downloadPath))
+		.then(p => this.ensureDir(locations.targetPath))
+		.then(p => this.getLocation(locations.perkUrl))
+		.then(location => this.download(location, locations.zipPath))
+		.then(downloadDir => this.unzip(downloadDir, locations.extractPath))
+		.then(unzipDir => mergedirs(unzipDir, locations.targetPath, 'skip'))
+		.then(() => this.finish(locations.targetPath));
+	},
 	help: function() {
 		return help;
 	},
@@ -61,6 +73,18 @@ module.exports = {
 					}
 				}
 			);
+		});
+	},
+	clearPath: function(path){
+		return new Promise((resolve, reject) => {
+			fs.remove(path, function(err, data) {
+				if (err) {
+					reject(err);
+				}
+				else {
+					resolve();
+				}
+			});
 		});
 	},
 	download: function(url, to) {
