@@ -2,7 +2,6 @@
 'use strict';
 
 var path = require('path');
-var mergedirs = require('merge-dirs').default;
 var steps = require('./steps');
 
 var PERK_URL = 'http://api.perkframework.com/location';
@@ -22,20 +21,13 @@ if (!path.isAbsolute(targetPath)) {
 	targetPath = path.join(process.cwd(), targetPath);
 }
 
-steps.ensureDir(TMP_PATH).then(function (p) {
-	return steps.ensureDir(DOWNLOAD_PATH);
-}).then(function (p) {
-	return steps.ensureDir(targetPath);
-}).then(function (p) {
-	return steps.getLocation(PERK_URL);
-}).then(function (location) {
-	return steps.download(location, ZIP_PATH);
-}).then(function (downloadDir) {
-	return steps.unzip(downloadDir, EXTRACT_PATH);
-}).then(function (unzipDir) {
-	return mergedirs(unzipDir, targetPath, 'skip');
-}).then(function () {
-	return steps.finish(targetPath);
+steps.all({
+	tmpPath: TMP_PATH,
+	downloadPath: DOWNLOAD_PATH,
+	perkUrl: PERK_URL,
+	zipPath: ZIP_PATH,
+	extractPath: EXTRACT_PATH,
+	targetPath: targetPath
 }).then(console.log).catch(function (err) {
 	if (err.hasOwnProperty(message) && err.hasOwnProperty(err.code)) {
 		var _message = err.message;
