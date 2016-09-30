@@ -29,12 +29,12 @@ steps.all({
 	extractPath: EXTRACT_PATH,
 	targetPath: targetPath
 }).then(console.log).catch(function (err) {
-	if (err.hasOwnProperty(message) && err.hasOwnProperty(err.code)) {
-		var _message = err.message;
+	if (err.hasOwnProperty("message") && err.hasOwnProperty("code")) {
+		var message = err.message;
 		if (err.code !== 0) {
-			_message += ' Please inform help@perkframework.com with code = ' + code;
+			message += ' Please inform help@perkframework.com with code = ' + code;
 		}
-		console.log(_message);
+		console.log(message);
 	} else {
 		console.log(err);
 	}

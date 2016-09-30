@@ -5,7 +5,7 @@ var fs = require('fs-extra');
 var request = require('request');
 var AdmZip = require('adm-zip');
 var mergedirs = require('merge-dirs').default;
-var _help = '\n\n\nusage: perk <install path>\n\nPerk is a well documented set of tools for building node web\napplications.\n\nUsing the perk command will download and install of the necessary perk\nfiles in the specified <install path>. The <install path> should\nspecify the directory where you want to set up your perk project.\n\t\nYou can read more about perk at http://perkframework.com\n\n\n\n';
+var _help = '\n\n\nusage: perk <install path>\n\nPerk is a well documented set of tools for building node web\napplications.\n\nUsing the perk command will download and install of the necessary perk\nfiles in the specified <install path>. The <install path> should\nspecify the directory where you want to set up your perk project.\n\nYou can read more about perk at http://perkframework.com\n\n\n\n';
 
 module.exports = {
 	all: function all(locations) {

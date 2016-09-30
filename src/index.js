@@ -1,5 +1,4 @@
 #!/usr/bin/env node --use_strict
-
 let path = require('path');
 let steps = require('./steps');
 
@@ -30,7 +29,7 @@ steps.all({
 })
 .then(console.log)
 .catch(err => {
-	if(err.hasOwnProperty(message) && err.hasOwnProperty(err.code)) {
+	if(err.hasOwnProperty("message") && err.hasOwnProperty("code")) {
 		let message = err.message;
 		if(err.code !== 0) {
 			message += ' Please inform help@perkframework.com with code = '+code;
