@@ -29,7 +29,7 @@ steps.all({
 	extractPath: EXTRACT_PATH,
 	targetPath: targetPath
 }).then(console.log).catch(function (err) {
-	if (err.hasOwnProperty("message") && err.hasOwnProperty("code")) {
+	if (err.hasOwnProperty('message') && err.hasOwnProperty('code')) {
 		var message = err.message;
 		if (err.code !== 0) {
 			message += ' Please inform help@perkframework.com with code = ' + code;
