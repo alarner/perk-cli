@@ -29,6 +29,9 @@ steps.all({
 	extractPath: EXTRACT_PATH,
 	targetPath: targetPath
 }).then(console.log).catch(function (err) {
+  if(err.code === 'EACCES') {
+    console.log('Permission was denied on ' + err.path + ' directory for downloading perk files');
+  }
 	if (err.hasOwnProperty(message) && err.hasOwnProperty(err.code)) {
 		var _message = err.message;
 		if (err.code !== 0) {
