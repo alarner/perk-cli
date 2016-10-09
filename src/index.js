@@ -21,15 +21,15 @@ if(!path.isAbsolute(targetPath)) {
 	targetPath = path.join(process.cwd(), targetPath);
 }
 
-check().then((resp) => {
-  steps.all({
+check().then((current) => {
+  return steps.all({
     tmpPath: TMP_PATH,
     downloadPath: DOWNLOAD_PATH,
     perkUrl: PERK_URL,
     zipPath: ZIP_PATH,
     extractPath: EXTRACT_PATH,
     targetPath: targetPath
-  })
+  }, current);
 })
 .then(console.log)
 .catch(err => {

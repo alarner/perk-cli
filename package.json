@@ -11,7 +11,6 @@
   "bin": {
     "perk": "./dist/index.js"
   },
-  "config" : { "version" : "1.1.5" },
   "author": "Aaron Larner",
   "license": "MIT",
   "homepage": "https://github.com/alarner/perk-cli#readme",

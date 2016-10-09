@@ -22,15 +22,15 @@ if (!path.isAbsolute(targetPath)) {
 	targetPath = path.join(process.cwd(), targetPath);
 }
 
-check().then(function (resp) {
-	steps.all({
+check().then(function (current) {
+	return steps.all({
 		tmpPath: TMP_PATH,
 		downloadPath: DOWNLOAD_PATH,
 		perkUrl: PERK_URL,
 		zipPath: ZIP_PATH,
 		extractPath: EXTRACT_PATH,
 		targetPath: targetPath
-	});
+	}, current);
 }).then(console.log).catch(function (err) {
 	if (err.hasOwnProperty(message) && err.hasOwnProperty(err.code)) {
 		var _message = err.message;

@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = function () {
-	var currentVersion = process.env.npm_package_config_version;
+	var currentVersion = require('../package.json').version;
 	return new Promise(function (resolve, reject) {
 		var spawn = require('child_process').spawn;
 		var semver = require('semver');
@@ -11,8 +11,9 @@ module.exports = function () {
 			if (semver.gt(versionString, currentVersion)) {
 				// version is outdated
 				console.log('There is a newer version of perk-cli available please upgrade');
+				return resolve(false);
 			}
-			return resolve();
+			return resolve(true);
 		});
 		version.stderr.on('data', function (data) {
 			// console.log(`stderr: ${data}`);
