@@ -97,7 +97,7 @@ describe('steps', function() {
 		});
 		it('should grab the location from the server', function() {
 			return steps.getLocation(PERK_URL).then(location => {
-				expect(location).to.equal('https://github.com/alarner/react-express-template/archive/master.zip');
+				expect(location.substr(0, 40)).to.equal('https://github.com/alarner/perk/archive/');
 			});
 		});
 	});
