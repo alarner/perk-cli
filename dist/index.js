@@ -3,6 +3,7 @@
 
 var path = require('path');
 var steps = require('./steps');
+var check = require('./check');
 
 var PERK_URL = 'http://api.perkframework.com/location';
 var TMP_PATH = path.join(__dirname, 'tmp');
@@ -21,13 +22,15 @@ if (!path.isAbsolute(targetPath)) {
 	targetPath = path.join(process.cwd(), targetPath);
 }
 
-steps.all({
-	tmpPath: TMP_PATH,
-	downloadPath: DOWNLOAD_PATH,
-	perkUrl: PERK_URL,
-	zipPath: ZIP_PATH,
-	extractPath: EXTRACT_PATH,
-	targetPath: targetPath
+check().then(function (resp) {
+	steps.all({
+		tmpPath: TMP_PATH,
+		downloadPath: DOWNLOAD_PATH,
+		perkUrl: PERK_URL,
+		zipPath: ZIP_PATH,
+		extractPath: EXTRACT_PATH,
+		targetPath: targetPath
+	});
 }).then(console.log).catch(function (err) {
 	if (err.hasOwnProperty(message) && err.hasOwnProperty(err.code)) {
 		var _message = err.message;

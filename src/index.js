@@ -2,6 +2,7 @@
 
 let path = require('path');
 let steps = require('./steps');
+let check = require('./check');
 
 const PERK_URL = 'http://api.perkframework.com/location';
 const TMP_PATH = path.join(__dirname, 'tmp');
@@ -20,13 +21,15 @@ if(!path.isAbsolute(targetPath)) {
 	targetPath = path.join(process.cwd(), targetPath);
 }
 
-steps.all({
-	tmpPath: TMP_PATH,
-	downloadPath: DOWNLOAD_PATH,
-	perkUrl: PERK_URL,
-	zipPath: ZIP_PATH,
-	extractPath: EXTRACT_PATH,
-	targetPath: targetPath
+check().then((resp) => {
+  steps.all({
+    tmpPath: TMP_PATH,
+    downloadPath: DOWNLOAD_PATH,
+    perkUrl: PERK_URL,
+    zipPath: ZIP_PATH,
+    extractPath: EXTRACT_PATH,
+    targetPath: targetPath
+  })
 })
 .then(console.log)
 .catch(err => {
@@ -41,3 +44,4 @@ steps.all({
 		console.log(err);
 	}
 });
+
