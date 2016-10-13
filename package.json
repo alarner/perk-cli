@@ -4,8 +4,9 @@
   "description": "Command link tool for bootstrapping perk apps",
   "main": "dist/index.js",
   "scripts": {
+    "dev": "gulp dev",
+    "build": "gulp prod",
     "test": "mocha --compilers js:babel-register",
-    "build": "./node_modules/.bin/babel src -d dist",
     "link": "npm test && npm run build && npm link"
   },
   "bin": {
@@ -27,6 +28,8 @@
     "babel-register": "^6.16.3",
     "chai": "^3.5.0",
     "chai-as-promised": "^5.3.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
     "mocha": "^2.4.5"
   }
 }
