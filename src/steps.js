@@ -3,6 +3,8 @@ let fs = require('fs-extra');
 let request = require('request');
 let AdmZip = require('adm-zip');
 let mergedirs = require('merge-dirs').default;
+let crypto = require('crypto');
+let async = require('async');
 let help =
 `
 
@@ -31,6 +33,7 @@ module.exports = {
 		.then(p => this.getLocation(locations.perkUrl))
 		.then(location => this.download(location, locations.zipPath))
 		.then(downloadDir => this.unzip(downloadDir, locations.extractPath))
+		.then(unzipDir => this.recordHash(unzipDir))
 		.then(unzipDir => mergedirs(unzipDir, locations.targetPath, 'skip'))
 		.then(() => this.finish(locations.targetPath));
 	},
@@ -135,6 +138,53 @@ module.exports = {
 					code: 5
 				});
 			}
+		});
+	},
+	recordHash: function(unzipDir) {
+		console.log('recordHash', unzipDir);
+		return this.ensureDir(path.join(unzipDir, '.perk', 'hashes'))
+		.then((hashDir) => {
+			return new Promise((resolve, reject) => {
+				const filePaths = [];
+				fs.walk(unzipDir)
+				.on('data', function (file) {
+					if(!file.isDirectory()) {
+						filePaths.push(file.path);
+					}
+				})
+				.on('end', function () {
+					resolve(filePaths);
+				})
+			});
+		})
+		.then((filePaths) => {
+			return new Promise((resolve, reject) => {
+				async.map(
+					filePaths,
+					(filePath, cb) => {
+						fs.readFile(filePath, (err, data) => {
+							if(err) {
+								return cb(err);
+							}
+							return cb(
+								null,
+								crypto
+									.createHash('md5')
+									.update(data.toString().trim())
+									.digest('hex')
+							);
+						});
+					},
+					(err, results) => {
+						if(err) {
+							return reject(err);
+						}
+						return resulve(results)
+						resolve(unzipDir);
+					}
+				);
+			})
+			.then(() => Promise.resolve(unzipDir));
 		});
 	},
 	ensureDir: function(dirPath) {

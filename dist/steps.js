@@ -5,6 +5,8 @@ var fs = require('fs-extra');
 var request = require('request');
 var AdmZip = require('adm-zip');
 var mergedirs = require('merge-dirs').default;
+var crypto = require('crypto');
+var async = require('async');
 var _help = '\n\n\nusage: perk <install path>\n\nPerk is a well documented set of tools for building node web\napplications.\n\nUsing the perk command will download and install of the necessary perk\nfiles in the specified <install path>. The <install path> should\nspecify the directory where you want to set up your perk project.\n\nYou can read more about perk at http://perkframework.com\n\n\n\n';
 
 module.exports = {
@@ -23,6 +25,8 @@ module.exports = {
 			return _this.download(location, locations.zipPath);
 		}).then(function (downloadDir) {
 			return _this.unzip(downloadDir, locations.extractPath);
+		}).then(function (unzipDir) {
+			return _this.recordHash(unzipDir);
 		}).then(function (unzipDir) {
 			return mergedirs(unzipDir, locations.targetPath, 'skip');
 		}).then(function () {
@@ -118,6 +122,40 @@ module.exports = {
 					code: 5
 				});
 			}
+		});
+	},
+	recordHash: function recordHash(unzipDir) {
+		console.log('recordHash', unzipDir);
+		return this.ensureDir(path.join(unzipDir, '.perk', 'hashes')).then(function (hashDir) {
+			return new Promise(function (resolve, reject) {
+				var filePaths = [];
+				fs.walk(unzipDir).on('data', function (file) {
+					if (!file.isDirectory()) {
+						filePaths.push(file.path);
+					}
+				}).on('end', function () {
+					resolve(filePaths);
+				});
+			});
+		}).then(function (filePaths) {
+			return new Promise(function (resolve, reject) {
+				async.map(filePaths, function (filePath, cb) {
+					fs.readFile(filePath, function (err, data) {
+						if (err) {
+							return cb(err);
+						}
+						return cb(null, crypto.createHash('md5').update(data.toString().trim()).digest('hex'));
+					});
+				}, function (err, results) {
+					if (err) {
+						return reject(err);
+					}
+					return resulve(results);
+					resolve(unzipDir);
+				});
+			}).then(function () {
+				return Promise.resolve(unzipDir);
+			});
 		});
 	},
 	ensureDir: function ensureDir(dirPath) {
