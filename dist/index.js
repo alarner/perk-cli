@@ -32,13 +32,13 @@ steps.all({
 	if (err.hasOwnProperty('code')) {
 		if (err.code === 'EACCES') {
 			return console.log('Permission was denied on ' + err.path + ' directory for downloading perk files');
-		} else if (err.hasOwnProperty('message')) {
-			var message = err.message;
-			if (err.code !== 0) {
-				message += ' Please inform help@perkframework.com with code = ' + code;
-			}
-			return console.log(message);
 		}
+	} else if (err.hasOwnProperty('message')) {
+		var message = err.message;
+		if (err.code !== 0) {
+			message += ' Please inform help@perkframework.com with code = ' + code;
+		}
+		return console.log(message);
 	}
 	console.log(err);
 });

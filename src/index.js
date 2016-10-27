@@ -34,13 +34,14 @@ steps.all({
 			return console.log(
 				`Permission was denied on ${err.path} directory for downloading perk files`
 			);
-		} else if(err.hasOwnProperty('message')) {
-			let message = err.message;
-			if(err.code !== 0) {
-				message += ' Please inform help@perkframework.com with code = '+code;
-			}
-			return console.log(message);
 		}
+	}
+	else if(err.hasOwnProperty('message')) {
+		let message = err.message;
+		if(err.code !== 0) {
+			message += ' Please inform help@perkframework.com with code = '+code;
+		}
+		return console.log(message);
 	}
 	console.log(err);
 });
