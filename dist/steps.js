@@ -8,7 +8,7 @@ var mergedirs = require('merge-dirs').default;
 var _help = '\n\n\nusage: perk <install path>\n\nPerk is a well documented set of tools for building node web\napplications.\n\nUsing the perk command will download and install of the necessary perk\nfiles in the specified <install path>. The <install path> should\nspecify the directory where you want to set up your perk project.\n\nYou can read more about perk at http://perkframework.com\n\n\n\n';
 
 module.exports = {
-	all: function all(locations) {
+	all: function all(locations, current) {
 		var _this = this;
 
 		return this.ensureDir(locations.tmpPath).then(function (p) {
@@ -26,7 +26,7 @@ module.exports = {
 		}).then(function (unzipDir) {
 			return mergedirs(unzipDir, locations.targetPath, 'skip');
 		}).then(function () {
-			return _this.finish(locations.targetPath);
+			return _this.finish(locations.targetPath, current);
 		});
 	},
 	help: function help() {
@@ -133,7 +133,7 @@ module.exports = {
 			});
 		});
 	},
-	finish: function finish(dirPath) {
-		return '\n\n\nYour new project has successfully been created in ' + dirPath + '\n\nYou should run:\n\n\tcd ' + dirPath + ' && npm install\n\nWhile dependencies for your new perk app are installing you can check\nout more info on how to use all the great features of perk at:\n\nhttp://perkframework.com/v1/guides/getting-started-os-x.html\n\n\n\n';
+	finish: function finish(dirPath, current) {
+		return '\n\n\nYour new project has successfully been created in ' + dirPath + '\n\nYou should run:\n\n\tcd ' + dirPath + ' && npm install\n\nWhile dependencies for your new perk app are installing you can check\nout more info on how to use all the great features of perk at:\n\nhttp://perkframework.com/v1/guides/getting-started-os-x.html\n\n\n\n' + (current ? '' : 'Be Aware your perky-cli version is outdated, there may be differences with the docs');
 	}
 };

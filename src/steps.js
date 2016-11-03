@@ -23,7 +23,7 @@ You can read more about perk at http://perkframework.com
 `;
 
 module.exports = {
-	all: function(locations) {
+	all: function(locations, current) {
 		return this.ensureDir(locations.tmpPath)
 		.then(p => this.clearPath(locations.extractPath))
 		.then(p => this.ensureDir(locations.downloadPath))
@@ -32,7 +32,7 @@ module.exports = {
 		.then(location => this.download(location, locations.zipPath))
 		.then(downloadDir => this.unzip(downloadDir, locations.extractPath))
 		.then(unzipDir => mergedirs(unzipDir, locations.targetPath, 'skip'))
-		.then(() => this.finish(locations.targetPath));
+		.then(() => this.finish(locations.targetPath, current));
 	},
 	help: function() {
 		return help;
@@ -150,7 +150,7 @@ module.exports = {
 			});
 		});
 	},
-	finish: function(dirPath) {
+	finish: function(dirPath, current) {
 		return `
 
 
@@ -167,6 +167,6 @@ http://perkframework.com/v1/guides/getting-started-os-x.html
 
 
 
-`;
+` +  (current ? '' : 'Be Aware your perky-cli version is outdated, there may be differences with the docs');
 	}
 };
